@@ -1,6 +1,8 @@
 #include "AES2.h"
 #include <iostream>
 #include<fstream>
+#include<string>
+#include<sstream>
 
 using namespace std;
 
@@ -244,30 +246,7 @@ void AES2::DisplayState() {
 
  }
 
- //perfroms Galois field multiplication with one int and a char
- uint8_t AES2::GFMul(uint8_t in, uint8_t a) {
-	 //local variable
-	 uint8_t p = 0;
-	 uint8_t hi_bit_set;
-	 for (int counter = 0; counter < 8; counter++) {
-		 if (((uint8_t)a & (uint8_t)1) != 0) {
-			 p ^= in;
-		 }
-
-		 hi_bit_set =(uint8_t) in & 0x80;
-
-		 in <<= 1;
-
-		 if (hi_bit_set != 0) {
-			 in ^= 0x1b;
-		 }
-		 a >>= 1;
-	 }
-
-	 return p;
- }
-
- //second function
+ //performs Galois field multiplication with two bytes
  uint8_t AES2::GFMul2(byte a, byte b) {
 	 byte p = 0;
 	 byte hi_bit_set;
@@ -290,6 +269,9 @@ void AES2::DisplayState() {
 
  //encrypts the state vector
  void AES2::encrypt() {
+	 //first read file
+	 ReadFile();
+
 	generateState();
 	generateKeys();
 	AddKeytoState(0);
@@ -394,6 +376,9 @@ void AES2::DisplayState() {
 
  //decrypts state vector
  void AES2::decrypt() {
+	 //first read file
+	 ReadFile();
+
 	generateState();
 	generateKeys();
 
@@ -581,4 +566,25 @@ void AES2::DisplayState() {
 	 }
 	 OutPutFile(1);
 
+ }
+
+ //get the entire key in hexadecimal as a string input 
+ void AES2::SetKey() {
+	 // string s to store inputted hexadecimal string
+	 string s;
+	 //used to temporarly store individual hexadecimal strings
+	 string temp;
+
+	 //Get the input string
+	 cout << "Enter the list of inputs" << endl;
+	 getline(cin, s);
+
+	 //split the inputted string by using a space as the delimiter
+	 stringstream X(s);
+	 while (getline(X, temp, ' ')) {
+		 //convert indivdual string token to unsigned long using base 16
+		 //then cast long (32-bits) to uint8_t (8 bits)
+		 //then add to vector
+		 key_input.push_back((uint8_t)stoul(temp, nullptr, 16));
+	 }
  }

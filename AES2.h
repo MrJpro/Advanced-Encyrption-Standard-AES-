@@ -13,6 +13,8 @@ class AES2 {
 //class variables
 public:
 string fileName;
+
+private:
 uint8_t S_Box[16][16] = {
     {0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76},
     {0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0},
@@ -64,6 +66,11 @@ vector<vector<uint8_t>> Keys;
 //class functions
 public:
 AES2(string s);
+void SetKey(); // new function that gets entire key as a string rather than one by one
+void encrypt();
+void decrypt();
+
+private:
 void DisplayVector(vector<uint8_t> v);
 void DisplayInput();
 void DisplayState();
@@ -80,20 +87,18 @@ void SubStateBlocks();
 void ShiftRows();
 void MixColmns();
 void AddKeytoState(int rn);
-uint8_t GFMul(uint8_t in, uint8_t a);
 uint8_t GFMul2(byte a, byte b);
-void encrypt();
 void generateOutput();
 void DisplayOutput();
 void InvShiftRows();
 void InvMixColumns();
 void InvSubStateBlocks();
-void decrypt();
 void ReadFile();
 void OutPutFile(int n);
 void GenerateInputBlocks();
 void DisplayInputBlocks();
 void encrypt2();
 void decrypt2();
+
 };
 #endif // !AES2_H_
